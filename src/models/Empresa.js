@@ -21,7 +21,23 @@ const empresaSchema = new mongoose.Schema(
     ativa: {
       type: Boolean,
       default: true
+    },
+
+    googleCalendarId: {
+      type: String,
+      default: ""
+    },
+
+    googleRefreshToken: {
+      type: String,
+      default: ""
+    },
+
+    googleConnected: {
+      type: Boolean,
+      default: false
     }
+
   },
   {
     timestamps: true

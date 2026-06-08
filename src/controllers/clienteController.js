@@ -1,5 +1,5 @@
 
-import { criarClienteService, listarClientesService, buscarClientePorIdService, atualizarClienteService, deletarClienteService } from "../services/clienteService.js";
+import { criarClienteService, listarClientesService, buscarClientePorIdService, atualizarClienteService, deletarClienteService, listarClientesPorEmpresaService } from "../services/clienteService.js";
 
 export async function criarCliente(req, res) {
   try {
@@ -118,6 +118,30 @@ export async function deletarCliente(
     return res.json({
       mensagem: "Cliente removido"
     });
+
+  } catch (error) {
+
+    return res.status(500).json({
+      erro: error.message
+    });
+
+  }
+}
+
+export async function listarClientesPorEmpresa(
+  req,
+  res
+) {
+  try {
+
+    const clientes =
+      await listarClientesPorEmpresaService(
+        req.params.id
+      );
+
+    return res.json(
+      clientes
+    );
 
   } catch (error) {
 

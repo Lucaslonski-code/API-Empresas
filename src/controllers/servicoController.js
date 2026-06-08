@@ -4,7 +4,8 @@ import {
   listarServicosService,
   buscarServicoPorIdService,
   atualizarServicoService,
-  deletarServicoService
+  deletarServicoService,
+  listarServicosPorEmpresaService
 } from "../services/servicoService.js";
 
 export async function criarServico(req, res) {
@@ -124,6 +125,30 @@ export async function deletarServico(
     return res.json({
       mensagem: "Serviço removido"
     });
+
+  } catch (error) {
+
+    return res.status(500).json({
+      erro: error.message
+    });
+
+  }
+}
+
+export async function listarServicosPorEmpresa(
+  req,
+  res
+) {
+  try {
+
+    const servicos =
+      await listarServicosPorEmpresaService(
+        req.params.id
+      );
+
+    return res.json(
+      servicos
+    );
 
   } catch (error) {
 

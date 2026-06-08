@@ -40,3 +40,13 @@ export async function deletarServicoService(id) {
   return await Servico.findByIdAndDelete(id);
 
 }
+
+export async function listarServicosPorEmpresaService(
+  empresaId
+) {
+
+  return await Servico.find({
+    empresaId
+  });
+
+}

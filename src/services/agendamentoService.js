@@ -71,6 +71,20 @@ export async function criarAgendamentoService(
 
   }
 
+  const horarioOcupado =
+    await Agendamento.findOne({
+      empresaId: dados.empresaId,
+      dataHora: dados.dataHora
+    });
+
+  if (horarioOcupado) {
+
+    throw new Error(
+      "Horário já está ocupado"
+    );
+
+  }
+
   return await Agendamento.create(
     dados
   );
@@ -79,10 +93,10 @@ export async function criarAgendamentoService(
 
 export async function listarAgendamentosService() {
 
-return await Agendamento.find()
-  .populate("empresaId")
-  .populate("clienteId")
-  .populate("servicoId");
+  return await Agendamento.find()
+    .populate("empresaId")
+    .populate("clienteId")
+    .populate("servicoId");
 
 }
 
@@ -120,5 +134,18 @@ export async function deletarAgendamentoService(
   return await Agendamento.findByIdAndDelete(
     id
   );
+
+}
+
+export async function listarAgendamentosPorEmpresaService(
+  empresaId
+) {
+
+  return await Agendamento.find({
+    empresaId
+  })
+    .populate("empresaId")
+    .populate("clienteId")
+    .populate("servicoId");
 
 }

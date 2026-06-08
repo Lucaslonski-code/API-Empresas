@@ -4,7 +4,8 @@ import {
   listarAgendamentosService,
   buscarAgendamentoPorIdService,
   atualizarAgendamentoService,
-  deletarAgendamentoService
+  deletarAgendamentoService,
+  listarAgendamentosPorEmpresaService
 } from "../services/agendamentoService.js";
 
 export async function criarAgendamento(
@@ -140,6 +141,30 @@ export async function deletarAgendamento(
     return res.json({
       mensagem: "Agendamento removido"
     });
+
+  } catch (error) {
+
+    return res.status(500).json({
+      erro: error.message
+    });
+
+  }
+}
+
+export async function listarAgendamentosPorEmpresa(
+  req,
+  res
+) {
+  try {
+
+    const agendamentos =
+      await listarAgendamentosPorEmpresaService(
+        req.params.id
+      );
+
+    return res.json(
+      agendamentos
+    );
 
   } catch (error) {
 

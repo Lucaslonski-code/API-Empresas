@@ -40,3 +40,13 @@ export async function deletarClienteService(id) {
   return await Cliente.findByIdAndDelete(id);
 
 }
+
+export async function listarClientesPorEmpresaService(
+  empresaId
+) {
+
+  return await Cliente.find({
+    empresaId
+  });
+
+}
