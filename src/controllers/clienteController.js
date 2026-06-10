@@ -4,8 +4,13 @@ import { criarClienteService, listarClientesService, buscarClientePorIdService, 
 export async function criarCliente(req, res) {
   try {
 
-    const cliente =
-      await criarClienteService(req.body);
+req.body.empresaId =
+  req.empresaId;
+
+const cliente =
+  await criarClienteService(
+    req.body
+  );
 
     return res.status(201).json(cliente);
 
@@ -18,13 +23,20 @@ export async function criarCliente(req, res) {
   }
 }
 
-export async function listarClientes(req, res) {
+export async function listarClientes(
+  req,
+  res
+) {
   try {
 
     const clientes =
-      await listarClientesService();
+      await listarClientesPorEmpresaService(
+        req.empresaId
+      );
 
-    return res.json(clientes);
+    return res.json(
+      clientes
+    );
 
   } catch (error) {
 

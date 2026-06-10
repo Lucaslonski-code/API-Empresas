@@ -5,6 +5,9 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 
+import authMiddleware from "./src/middlewares/authMiddleware.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import usuarioRoutes from "./src/routes/usuarioRoutes.js";
 import empresaRoutes from "./src/routes/empresaRoutes.js";
 import servicoRoutes from "./src/routes/servicoRoutes.js";
 import clienteRoutes from "./src/routes/clienteRoutes.js";
@@ -26,6 +29,30 @@ app.use(servicoRoutes);
 app.use(clienteRoutes);
 app.use(agendamentoRoutes);
 app.use(googleRoutes);
+app.use(usuarioRoutes);
+app.use(authRoutes);
+
+app.get(
+
+  "/perfil",
+
+  authMiddleware,
+
+  (req, res) => {
+
+    return res.json({
+
+      usuarioId:
+        req.usuarioId,
+
+      empresaId:
+        req.empresaId
+
+    });
+
+  }
+
+);
 
 app.get("/ping", (req, res) => {
   return res.json({

@@ -6,31 +6,46 @@ import {
   listarClientes,
   buscarClientePorId,
   atualizarCliente,
-  deletarCliente,
-  listarClientesPorEmpresa
+  deletarCliente
 } from "../controllers/clienteController.js";
 
-import validateEmpresa from "../middlewares/validateEmpresa.js";
+import validateId
+from "../middlewares/validateId.js";
 
-import validateId from "../middlewares/validateId.js";
+import authMiddleware
+from "../middlewares/authMiddleware.js";
 
-const router = express.Router();
+const router =
+  express.Router();
 
-router.post("/cliente", criarCliente);
+router.post(
+  "/cliente",
+  authMiddleware,
+  criarCliente
+);
 
-router.get("/cliente", listarClientes);
-
-// List Clientes por Empresa.
 router.get(
-  "/empresa/:id/clientes",
-  validateId,
-  validateEmpresa,
-  listarClientesPorEmpresa
+  "/cliente",
+  authMiddleware,
+  listarClientes
 );
 
 router.route("/cliente/:id")
-  .get(validateId, buscarClientePorId)
-  .put(validateId, atualizarCliente)
-  .delete(validateId, deletarCliente);
+  .get(
+    authMiddleware,
+    validateId,
+    buscarClientePorId
+  )
+  .put(
+    authMiddleware,
+    validateId,
+    atualizarCliente
+  )
+  .delete(
+    authMiddleware,
+    validateId,
+    deletarCliente
+  );
 
 export default router;
+
