@@ -24,13 +24,21 @@ export async function criarEmpresa(req, res) {
   }
 }
 
-export async function listarEmpresas(req, res) {
+export async function listarEmpresas(
+  req,
+  res
+) {
+
   try {
 
-    const empresas =
-      await listarEmpresasService();
+    const empresa =
+      await buscarEmpresaPorIdService(
+        req.empresaId
+      );
 
-    return res.json(empresas);
+    return res.json(
+      empresa
+    );
 
   } catch (error) {
 
@@ -39,6 +47,7 @@ export async function listarEmpresas(req, res) {
     });
 
   }
+
 }
 
 export async function buscarEmpresaPorId(req, res) {

@@ -11,8 +11,13 @@ import {
 export async function criarServico(req, res) {
   try {
 
-    const servico =
-      await criarServicoService(req.body);
+req.body.empresaId =
+  req.empresaId;
+
+const servico =
+  await criarServicoService(
+    req.body
+  );
 
     return res.status(201).json(servico);
 
@@ -25,13 +30,20 @@ export async function criarServico(req, res) {
   }
 }
 
-export async function listarServicos(req, res) {
+export async function listarServicos(
+  req,
+  res
+) {
   try {
 
     const servicos =
-      await listarServicosService();
+      await listarServicosPorEmpresaService(
+        req.empresaId
+      );
 
-    return res.json(servicos);
+    return res.json(
+      servicos
+    );
 
   } catch (error) {
 
@@ -49,10 +61,13 @@ export async function buscarServicoPorId(
   try {
 
     const servico =
-      await buscarServicoPorIdService(
-        req.params.id
-      );
+await buscarServicoPorIdService(
 
+  req.params.id,
+
+  req.empresaId
+
+);
     if (!servico) {
 
       return res.status(404).json({
@@ -158,3 +173,4 @@ export async function listarServicosPorEmpresa(
 
   }
 }
+

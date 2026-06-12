@@ -30,7 +30,8 @@ export async function buscarClientePorIdService(
 
 export async function atualizarClienteService(
   id,
-  dados
+  dados,
+  empresaId
 ) {
 
   return await Cliente.findOneAndUpdate(

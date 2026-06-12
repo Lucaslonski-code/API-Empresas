@@ -77,6 +77,12 @@ export async function googleCallback(
 
     console.log(tokens);
 
+return res.json({
+  sucesso: true,
+  mensagem:
+    "Google Calendar conectado"
+});
+
   } catch (error) {
 
     return res.status(500).json({

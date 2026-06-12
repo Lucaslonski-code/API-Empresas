@@ -1,11 +1,9 @@
-
 import {
   criarAgendamentoService,
-  listarAgendamentosService,
+  listarAgendamentosPorEmpresaService,
   buscarAgendamentoPorIdService,
   atualizarAgendamentoService,
-  deletarAgendamentoService,
-  listarAgendamentosPorEmpresaService
+  deletarAgendamentoService
 } from "../services/agendamentoService.js";
 
 export async function criarAgendamento(
@@ -13,6 +11,9 @@ export async function criarAgendamento(
   res
 ) {
   try {
+
+    req.body.empresaId =
+      req.empresaId;
 
     const agendamento =
       await criarAgendamentoService(
@@ -39,7 +40,9 @@ export async function listarAgendamentos(
   try {
 
     const agendamentos =
-      await listarAgendamentosService();
+      await listarAgendamentosPorEmpresaService(
+        req.empresaId
+      );
 
     return res.json(
       agendamentos
@@ -62,7 +65,11 @@ export async function buscarAgendamentoPorId(
 
     const agendamento =
       await buscarAgendamentoPorIdService(
-        req.params.id
+
+        req.params.id,
+
+        req.empresaId
+
       );
 
     if (!agendamento) {
@@ -94,8 +101,13 @@ export async function atualizarAgendamento(
 
     const agendamento =
       await atualizarAgendamentoService(
+
         req.params.id,
+
+        req.empresaId,
+
         req.body
+
       );
 
     if (!agendamento) {
@@ -127,7 +139,11 @@ export async function deletarAgendamento(
 
     const agendamento =
       await deletarAgendamentoService(
-        req.params.id
+
+        req.params.id,
+
+        req.empresaId
+
       );
 
     if (!agendamento) {
@@ -159,7 +175,7 @@ export async function listarAgendamentosPorEmpresa(
 
     const agendamentos =
       await listarAgendamentosPorEmpresaService(
-        req.params.id
+        req.empresaId
       );
 
     return res.json(

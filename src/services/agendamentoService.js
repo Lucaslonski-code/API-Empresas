@@ -1,16 +1,8 @@
-
 import {
+  criarEventoGoogle,
+  atualizarEventoGoogle,
   deletarEventoGoogle
 } from "../integrations/google/googleCalendar.js";
-
-import {
-  atualizarEventoGoogle
-} from "../integrations/google/googleCalendar.js";
-
-import {
-  criarEventoGoogle
-}
-  from "../integrations/google/googleCalendar.js";
 
 import Agendamento from "../models/Agendamento.js";
 import Empresa from "../models/Empresa.js";
@@ -61,8 +53,7 @@ export async function criarAgendamentoService(
   }
 
   if (
-    cliente.empresaId.toString()
-    !==
+    cliente.empresaId.toString() !==
     empresa._id.toString()
   ) {
 
@@ -73,8 +64,7 @@ export async function criarAgendamentoService(
   }
 
   if (
-    servico.empresaId.toString()
-    !==
+    servico.empresaId.toString() !==
     empresa._id.toString()
   ) {
 
@@ -86,8 +76,13 @@ export async function criarAgendamentoService(
 
   const horarioOcupado =
     await Agendamento.findOne({
-      empresaId: dados.empresaId,
-      dataHora: dados.dataHora
+
+      empresaId:
+        dados.empresaId,
+
+      dataHora:
+        dados.dataHora
+
     });
 
   if (horarioOcupado) {
@@ -103,58 +98,65 @@ export async function criarAgendamentoService(
       dados
     );
 
-const inicio =
-  new Date(
-    agendamento.dataHora
-  );
+  const inicio =
+    new Date(
+      agendamento.dataHora
+    );
 
-const fim =
-  new Date(
-    inicio
-  );
+  const fim =
+    new Date(
+      inicio
+    );
 
-fim.setMinutes(
+  fim.setMinutes(
 
-  fim.getMinutes() +
+    fim.getMinutes() +
 
-  servico.duracaoMinutos
-
-);
-
-const eventoGoogle =
-await criarEventoGoogle(
-
-  empresa._id,
-
-  {
-
-    summary:
-      `${cliente.nome} - ${servico.nome}`,
-
-    description:
-      agendamento.observacoes || "",
-
-    start:
-      inicio.toISOString(),
-
-    end:
-      fim.toISOString()
-      
-    }
+    servico.duracaoMinutos
 
   );
+
+  const eventoGoogle =
+    await criarEventoGoogle(
+
+      empresa._id,
+
+      {
+
+        summary:
+          `${cliente.nome} - ${servico.nome}`,
+
+        description:
+          agendamento.observacoes || "",
+
+        start:
+          inicio.toISOString(),
+
+        end:
+          fim.toISOString()
+
+      }
+
+    );
 
   agendamento.googleEventId =
-  eventoGoogle.id;
+    eventoGoogle.id;
 
-await agendamento.save();
+  await agendamento.save();
 
-return agendamento;
+  return agendamento;
+
 }
 
-export async function listarAgendamentosService() {
+export async function listarAgendamentosPorEmpresaService(
+  empresaId
+) {
 
-  return await Agendamento.find()
+  return await Agendamento.find({
+
+    empresaId
+
+  })
     .populate("empresaId")
     .populate("clienteId")
     .populate("servicoId");
@@ -162,10 +164,17 @@ export async function listarAgendamentosService() {
 }
 
 export async function buscarAgendamentoPorIdService(
-  id
+  id,
+  empresaId
 ) {
 
-  return await Agendamento.findById(id)
+  return await Agendamento.findOne({
+
+    _id: id,
+
+    empresaId
+
+  })
     .populate("empresaId")
     .populate("clienteId")
     .populate("servicoId");
@@ -174,17 +183,31 @@ export async function buscarAgendamentoPorIdService(
 
 export async function atualizarAgendamentoService(
   id,
+  empresaId,
   dados
 ) {
 
   const agendamento =
-    await Agendamento.findByIdAndUpdate(
-      id,
-      dados,
+    await Agendamento.findOneAndUpdate(
+
       {
-        returnDocument: "after",
+
+        _id: id,
+
+        empresaId
+
+      },
+
+      dados,
+
+      {
+
+        new: true,
+
         runValidators: true
+
       }
+
     );
 
   if (!agendamento) {
@@ -252,11 +275,18 @@ export async function atualizarAgendamentoService(
 }
 
 export async function deletarAgendamentoService(
-  id
+  id,
+  empresaId
 ) {
 
   const agendamento =
-    await Agendamento.findById(id);
+    await Agendamento.findOne({
+
+      _id: id,
+
+      empresaId
+
+    });
 
   if (!agendamento) {
 
@@ -278,25 +308,18 @@ export async function deletarAgendamentoService(
 
   }
 
-  await Agendamento.findByIdAndDelete(
-    id
-  );
+  await Agendamento.findOneAndDelete({
+
+    _id: id,
+
+    empresaId
+
+  });
 
   return {
+
     sucesso: true
+
   };
-
-}
-
-export async function listarAgendamentosPorEmpresaService(
-  empresaId
-) {
-
-  return await Agendamento.find({
-    empresaId
-  })
-    .populate("empresaId")
-    .populate("clienteId")
-    .populate("servicoId");
 
 }
