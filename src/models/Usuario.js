@@ -25,7 +25,16 @@ const usuarioSchema =
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa",
         required: true
-      }
+      },
+
+      role: {
+  type: String,
+  enum: [
+    "user",
+    "admin"
+  ],
+  default: "user"
+}
 
     },
     {

@@ -13,9 +13,18 @@ export async function listarClientesService() {
 
 }
 
-export async function buscarClientePorIdService(id) {
+export async function buscarClientePorIdService(
+  id,
+  empresaId
+) {
 
-  return await Cliente.findById(id);
+  return await Cliente.findOne({
+
+    _id: id,
+
+    empresaId
+
+  });
 
 }
 
@@ -24,20 +33,41 @@ export async function atualizarClienteService(
   dados
 ) {
 
-  return await Cliente.findByIdAndUpdate(
-    id,
-    dados,
+  return await Cliente.findOneAndUpdate(
+
     {
+
+      _id: id,
+
+      empresaId
+
+    },
+
+    dados,
+
+    {
+
       returnDocument: "after",
+
       runValidators: true
+
     }
   );
 
 }
 
-export async function deletarClienteService(id) {
+export async function deletarClienteService(
+  id,
+  empresaId
+) {
 
-  return await Cliente.findByIdAndDelete(id);
+  return await Cliente.findOneAndDelete({
+
+    _id: id,
+
+    empresaId
+
+  });
 
 }
 

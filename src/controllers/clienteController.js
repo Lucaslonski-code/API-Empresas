@@ -1,18 +1,23 @@
 
 import { criarClienteService, listarClientesService, buscarClientePorIdService, atualizarClienteService, deletarClienteService, listarClientesPorEmpresaService } from "../services/clienteService.js";
 
-export async function criarCliente(req, res) {
+export async function criarCliente(
+  req,
+  res
+) {
   try {
 
-req.body.empresaId =
-  req.empresaId;
+    req.body.empresaId =
+      req.empresaId;
 
-const cliente =
-  await criarClienteService(
-    req.body
-  );
+    const cliente =
+      await criarClienteService(
+        req.body
+      );
 
-    return res.status(201).json(cliente);
+    return res.status(201).json(
+      cliente
+    );
 
   } catch (error) {
 
@@ -55,7 +60,11 @@ export async function buscarClientePorId(
 
     const cliente =
       await buscarClientePorIdService(
-        req.params.id
+
+        req.params.id,
+
+        req.empresaId
+
       );
 
     if (!cliente) {
@@ -85,8 +94,13 @@ export async function atualizarCliente(
 
     const cliente =
       await atualizarClienteService(
+
         req.params.id,
+
+        req.empresaId,
+
         req.body
+
       );
 
     if (!cliente) {
@@ -116,7 +130,11 @@ export async function deletarCliente(
 
     const cliente =
       await deletarClienteService(
-        req.params.id
+
+        req.params.id,
+
+        req.empresaId
+
       );
 
     if (!cliente) {
